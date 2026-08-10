@@ -20,10 +20,10 @@ def generate_legal_moves(board: Board) -> list:
                     if piece > 0: #white pawn
                         square_ahead = (row-1,col) #coordinates for the square infront of the pawn
                         if board.in_bounds(square_ahead) and board.get_piece(square_ahead) == 0: #check if square is vacant
-                            moves.appendr((start_pos, square_ahead))
+                            moves.append((start_pos, square_ahead))
                             square_ahead = (row-2, col)
-                            if row == 6 and board.get_piece(square_ahead): #double square checking, nested if here for ease
-                                moves.append((starting, square_ahead))
+                            if row == 6 and board.get_piece(square_ahead) == 0: #double square checking, nested if here for ease
+                                moves.append((start_pos, square_ahead))
                         for d_col in [1,-1]: #diagonal logic
                             diagonal_square = (row-1, col+d_col)
                             if board.in_bounds(diagonal_square):
@@ -43,7 +43,6 @@ def generate_legal_moves(board: Board) -> list:
                                 destination_piece = board.get_piece(diagonal_square)
                                 if destination_piece != 0 and not board.is_own_piece(destination_piece):
                                     moves.append(start_pos, diagonal_square)
-
 
                 elif piece_type == 2: #knight logic
                     n_moves = generate_singular_moves(board, start_pos, knight_moves)

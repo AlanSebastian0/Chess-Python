@@ -1,3 +1,4 @@
+from move_generation import generate_legal_moves
 class Board: #hello star
     #Rook = -4, knight = -2, Queen = -5, King = -6, bishop = -3 pawn = -1. Negative numbers indicate black and positive are white
     def __init__(self):
@@ -6,6 +7,8 @@ class Board: #hello star
         self.en_passant_sq = None
         self.castling_rights = {"white_kingside" : True, "white_queenside" : True, "black_kingside" : True, "black_queenside" : True}
         self.move_count = 0
+        self.white_king_location = (7,4)
+        self.black_king_location = (0,4)
     def start_grid(self):
         grid = [[0 for _ in range(8)] for _ in range(8)]
         grid[0] = [-4,-2,-3,-5,-6,-3,-2,-4]
@@ -33,19 +36,19 @@ class Board: #hello star
         return True
     def make_move(self,start_square: tuple, end_square: tuple):
         piece = self.get_piece(start_square)
+        if piece == 6 self.white_king_location = end_square #update the kings location when it moves to common variable
+        if piece == -6 self.black_king_location = end_square
         Srow,Scol = start_square
         Erow,Ecol = end_square
         self.grid[Srow][Scol] = 0
         self.grid[Erow][Ecol] = piece
         self.turn = "Black" if self.turn == "White" else "White"
 
-
     def __repr__(self):
         output = ""
         for row in self.grid:
             output = output + str(row) + "\n"
         return output
-from move_generation import generate_legal_moves
 def main():
     board = Board()
     moves = generate_legal_moves(board) #right now should generate all of the possible moves of the knights
