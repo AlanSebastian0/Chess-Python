@@ -36,13 +36,13 @@ def generate_legal_moves(board: Board) -> list:
                             moves.append((start_pos, square_ahead))
                             square_ahead = (row+2, col)
                             if row == 1 and board.get_piece(square_ahead):
-                                moves.append((start_pos, ))
+                                moves.append((start_pos, square_ahead))
                         for d_col in [1,-1]:
                             diagonal_square = (row+1,col+d_col)
                             if board.in_bounds(diagonal_square):
                                 destination_piece = board.get_piece(diagonal_square)
                                 if destination_piece != 0 and not board.is_own_piece(destination_piece):
-                                    moves.append(start_pos, diagonal_square)
+                                    moves.append((start_pos, diagonal_square))
 
                 elif piece_type == 2: #knight logic
                     n_moves = generate_singular_moves(board, start_pos, knight_moves)
