@@ -1,8 +1,8 @@
-from move_generation import generate_legal_moves
 dangerous_offsets = [
             (0, 1), (0, -1), (1, 0), (-1, 0),    # Straight (indices 0-3)
             (1, 1), (1, -1), (-1, -1), (-1, 1)   # Diagonal (indices 4-7)
         ]
+knight_moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]
 class Board: #hello star
     #Rook = -4, knight = -2, Queen = -5, King = -6, bishop = -3 pawn = -1. Negative numbers indicate black and positive are white
     def __init__(self):
@@ -38,7 +38,7 @@ class Board: #hello star
         if row >= 8 or col >= 8 or row < 0 or col < 0:
             return False
         return True
-    def make_move(self,start_square: tuple, end_square: tuple):
+    def make_move(self,start_square: tuple, end_square: tuple): #make move does not change the turns, MANUAL self.turn is required
         piece = self.get_piece(start_square)
         if piece == 6: self.white_king_location = end_square #update the kings location when it moves to common variable
         if piece == -6: self.black_king_location = end_square
@@ -46,20 +46,6 @@ class Board: #hello star
         Erow,Ecol = end_square
         self.grid[Srow][Scol] = 0
         self.grid[Erow][Ecol] = piece
-        self.turn = "Black" if self.turn == "White" else "White"
-
-    def make_move(self, start_square: tuple, end_square: tuple):
-        piece = self.get_piece(start_square)
-        if piece == 6: 
-            self.white_king_location = end_square
-        if piece == -6: 
-            self.black_king_location = end_square
-            
-        Srow, Scol = start_square
-        Erow, Ecol = end_square
-        self.grid[Srow][Scol] = 0
-        self.grid[Erow][Ecol] = piece
-        self.turn = "Black" if self.turn == "White" else "White"
 
     def is_check(self) -> bool:
         # Get king square for current turn
@@ -83,16 +69,26 @@ class Board: #hello star
                         return True
                     if index >= 4 and piece_type == 3:  # Bishop on diagonal ray
                         return True
-                    #other enemy pieces such as pawns, knights and kings block
-                    break
+                    break #ther enemies block the line of site
 
                 curr_row += d_row #empty square keeping on applying the offsets
                 curr_col += d_col
-        king_piece = self.get_piece(king_square)
-        if king_piece > 0:
-            end_pos1 = (k_row-1,k_col+1)
-            end_pos2 = (k_row)
+        for d_row, d_col in knight_moves:
+            curr_row = k_row + d_row
+            curr_col = k_col + d_col
+            if self.in_bounds((curr_row, curr_col)):
+                piece = self.get_piece((curr_row, curr_col))
+                if abs(piece) == 2 and not self.is_own_piece(piece):
+                    return True
 
+        pawn_offsets = [(-1,1), (-1,-1)] if self.turn == "White" else [(1,-1), (1,1)]
+        for d_row, d_col in pawn_offsets:
+            curr_row = k_row + d_row
+            curr_col = k_col + d_col
+            if self.in_bounds((curr_row, curr_col)):
+                piece = self.get_piece((curr_row, curr_col))
+                if abs(piece) == 1 and not self.is_own_piece(piece):
+                    return True
         return False  #return false when a check was not detected
     def __repr__(self):
         output = ""
@@ -101,8 +97,9 @@ class Board: #hello star
         return output
 def main():
     board = Board()
-    moves = generate_legal_moves(board) #right now should generate all of the possible moves of the knights
     print(board)
+    print(board.is_check())
+    pass
 if __name__ == "__main__":
     main()
 

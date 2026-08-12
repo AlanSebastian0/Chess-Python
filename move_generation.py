@@ -6,7 +6,7 @@ rook_offsets = [(0,1),(0,-1),(1,0),(-1,0)]
 bishop_offsets = [(1,1),(1,-1),(-1,-1),(-1,1)]
 king_offsets = rook_offsets + bishop_offsets
 queen_offsets = rook_offsets + bishop_offsets
-def generate_legal_moves(board: Board) -> list:
+def generate_legal_moves(board: Board) -> list: #pseudo legal check filtering has not been added yet
     moves = [] #store a list of tuples of the piece starting square and its ending sqaure
     for row in range(8):
         for col in range(8):
@@ -35,7 +35,7 @@ def generate_legal_moves(board: Board) -> list:
                         if board.in_bounds(square_ahead) and board.get_piece(square_ahead) == 0: #logic for vacant square
                             moves.append((start_pos, square_ahead))
                             square_ahead = (row+2, col)
-                            if row == 1 and board.get_piece(square_ahead):
+                            if row == 1 and board.get_piece(square_ahead) == 0:
                                 moves.append((start_pos, square_ahead))
                         for d_col in [1,-1]:
                             diagonal_square = (row+1,col+d_col)
