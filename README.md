@@ -15,7 +15,7 @@ A chess engine written in Python.
 ## In Progress
 
 - Pawn movement
-- Check detection 
+- board.unmake_move() partially completed
 - Checkmate detection
 
 ## Project Structure
