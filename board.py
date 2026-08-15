@@ -3,7 +3,7 @@ dangerous_offsets = [
             (1, 1), (1, -1), (-1, -1), (-1, 1)   # Diagonal (indices 4-7)
         ]
 knight_moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]
-class Board: #hello star
+class Board: 
     #Rook = -4, knight = -2, Queen = -5, King = -6, bishop = -3 pawn = -1. Negative numbers indicate black and positive are white
     def __init__(self):
         self.grid = self.start_grid()
@@ -13,39 +13,48 @@ class Board: #hello star
         self.move_count = 0
         self.white_king_location = (7,4)
         self.black_king_location = (0,4)
-    def start_grid(self):
+        self.history = [] #stores history of moves and captured pieces for unmake_move
+
+    def start_grid(self): #initilaises the board in its starting positon
         grid = [[0 for _ in range(8)] for _ in range(8)]
         grid[0] = [-4,-2,-3,-5,-6,-3,-2,-4]
         grid[1] = [-1 for _ in range(8)]
         grid[-1] = [4,2,3,5,6,3,2,4]
         grid[-2] = [1 for _ in range(8)]
         return grid
-    def get_piece(self,pos: tuple):
+
+    def get_piece(self,pos: tuple) -> int: #returns the piece occuping a sqaure
         row,col = pos[0],pos[1]
         return self.grid[row][col]
-    def is_empty(self,pos: tuple) -> bool:
+
+    def is_empty(self,pos: tuple) -> bool: #checks if a sqaure is empty
         row,col = pos
         result = True if self.grid[row][col] == 0 else False
         return result
-    def is_own_piece(self,piece: int) -> bool:
+
+    def is_own_piece(self,piece: int) -> bool: #checks if a piece is of the same colour of a players turn
         if (piece > 0 and self.turn == "White"):
             return True
         if (piece < 0 and self.turn == "Black"):
             return True
         return False
-    def in_bounds(self,pos: tuple) -> bool:
+
+    def in_bounds(self,pos: tuple) -> bool: #checks if a position is within boundaries
         row,col = pos
         if row >= 8 or col >= 8 or row < 0 or col < 0:
             return False
         return True
+
     def make_move(self,start_square: tuple, end_square: tuple): #make move does not change the turns, MANUAL self.turn is required
         piece = self.get_piece(start_square)
+        captured_piece = self.get_piece(end_square) #store captured piece before overwriting
         if piece == 6: self.white_king_location = end_square #update the kings location when it moves to common variable
         if piece == -6: self.black_king_location = end_square
         Srow,Scol = start_square
         Erow,Ecol = end_square
         self.grid[Srow][Scol] = 0
         self.grid[Erow][Ecol] = piece
+        self.history.append((start_square, end_square, piece, captured_piece)) #store the move and captured piece for unmake_move
 
     def is_check(self) -> bool:
         # Get king square for current turn
@@ -90,16 +99,29 @@ class Board: #hello star
                 if abs(piece) == 1 and not self.is_own_piece(piece):
                     return True
         return False  #return false when a check was not detected
+
+    def unmake_move(self): #undoes the last made move using history stack
+        if not self.history:
+            return #nothing to undo
+        start_square, end_square, moved_piece, captured_piece = self.history.pop()
+        if moved_piece == 6: self.white_king_location = start_square #restore kings location to starting square
+        if moved_piece == -6: self.black_king_location = start_square
+        Srow, Scol = start_square
+        Erow, Ecol = end_square
+        self.grid[Srow][Scol] = moved_piece #put moved piece back
+        self.grid[Erow][Ecol] = captured_piece #restore captured piece or 0
+
     def __repr__(self):
         output = ""
         for row in self.grid:
             output = output + str(row) + "\n"
         return output
+
 def main():
     board = Board()
     print(board)
     print(board.is_check())
     pass
+
 if __name__ == "__main__":
     main()
-
