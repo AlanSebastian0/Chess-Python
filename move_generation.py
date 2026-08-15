@@ -6,7 +6,7 @@ rook_offsets = [(0,1),(0,-1),(1,0),(-1,0)]
 bishop_offsets = [(1,1),(1,-1),(-1,-1),(-1,1)]
 king_offsets = rook_offsets + bishop_offsets
 queen_offsets = rook_offsets + bishop_offsets
-def generate_legal_moves(board: Board) -> list: #pseudo legal check filtering has not been added yet
+def pseudo_legal_moves(board: Board) -> list: #pseudo legal check filtering has not been added yet
     moves = [] #store a list of tuples of the piece starting square and its ending sqaure
     for row in range(8):
         for col in range(8):
@@ -102,3 +102,15 @@ def generate_singular_moves(board: Board, start_pos: tuple, offset: list) -> lis
             moves.append((start_pos, end_pos)) #append move if it was empty
             continue
     return moves
+def legal_moves(board: Board) -> list:
+    moves = []
+    pseudo_moves = pseudo_legal_moves(board)
+    for move in pseudo_moves:
+        board.make_move(move[0], move[1])
+        if board.is_check(): #check if the pseudo move was illegal
+            board.unmake_move()
+            continue 
+        board.unmake_move()
+        moves.append(move) #append the moves if it is legal
+    return moves
+

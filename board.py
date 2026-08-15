@@ -118,9 +118,6 @@ class Board:
         return output
 
 def main():
-    board = Board()
-    print(board)
-    print(board.is_check())
     pass
 
 if __name__ == "__main__":
