@@ -11,11 +11,12 @@ A chess engine written in Python.
 - Queen movement
 - King movement
 - Move generation
+- Enpassant logic
+- Castling logic
 
 ## In Progress
-
-- Pawn movement
-- board.unmake_move() partially completed
+- Performance checking (no. legal_moves upto a certain depth from starting position)
+- Stalemate detection
 - Checkmate detection
 
 ## Project Structure
