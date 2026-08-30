@@ -16,6 +16,24 @@ class Board:
         self.black_king_location = (0,4)
         self.history = [] #stores history of moves and captured pieces for unmake_move
 
+    def evaluation_points(self):
+        eval = 0 #points storage
+        for row in range(8):
+            for col in range(8):
+                pos = (row,col)
+                piece = self.get_piece(pos)
+                piece_type = abs(piece)
+                if piece == 1 or piece == -1: #pawn
+                    eval += piece
+                elif piece_type == 2 or piece_type == 3: #knight and bishop
+                    eval += 3 if piece > 0 else -3
+                elif piece_type == 4: #rook
+                    eval += 5 if piece > 0 else -5
+                elif piece_type == 5:
+                    eval += 9 if piece > 0 else -9
+        return eval
+
+                    
     def start_grid(self): #initilaises the board in its starting positon
         grid = [[0 for _ in range(8)] for _ in range(8)]
         grid[0] = [-4,-2,-3,-5,-6,-3,-2,-4]
@@ -46,7 +64,7 @@ class Board:
             return False
         return True
 
-    def make_move(self,start_square: tuple, end_square: tuple, promotion_piece: int = None): #make move does not change the turns, MANUAL self.turn is required
+    def make_move(self,start_square: tuple, end_square: tuple, promotion_piece: int = None): #make move does not change the turns, MANUAL self.turn is required promotion piece by defult is set to known if it was not passed in
         piece = self.get_piece(start_square)
         captured_piece = self.get_piece(end_square) #store captured piece before overwriting
         Srow,Scol = start_square

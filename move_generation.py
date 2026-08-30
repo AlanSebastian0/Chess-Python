@@ -37,7 +37,7 @@ def pseudo_legal_moves(board: Board) -> list: #pseudo legal check filtering has 
                                 destination_piece = board.get_piece(diagonal_square) #store the 'piece' if it is in bounds
                                 if destination_piece != 0 and not board.is_own_piece(destination_piece): #if not empty and is not the same colour
                                     if row - 1 == 0: #pawn promotion on capture
-                                        for promo in [5, 4, 3, 2]:
+                                        for promo in [5, 4, 3, 2]: #possible pieces available for promotion
                                             moves.append((start_pos, diagonal_square, promo))
                                     else:
                                         moves.append((start_pos, diagonal_square))
@@ -153,3 +153,7 @@ def legal_moves(board: Board) -> list:
         board.unmake_move()
         moves.append(move) #append the moves if it is legal
     return moves
+def perft(board: Board):
+    no_of_moves = len(moves)
+    moves = legal_moves(board)
+    pass
