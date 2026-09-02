@@ -142,7 +142,7 @@ def generate_singular_moves(board: Board, start_pos: tuple, offset: list) -> lis
             moves.append((start_pos, end_pos)) #append move if it was empty
             continue
     return moves
-def legal_moves(board: Board) -> list:
+def legal_moves(board: Board) -> list: #the final function that looks at each pseudo move and confirms if legal
     moves = []
     pseudo_moves = pseudo_legal_moves(board)
     for move in pseudo_moves:
@@ -153,7 +153,18 @@ def legal_moves(board: Board) -> list:
         board.unmake_move()
         moves.append(move) #append the moves if it is legal
     return moves
-def perft(board: Board):
-    no_of_moves = len(moves)
+
+def perft(board: Board,depth: int): #peformance checking function to make sure that the number of legal moves are standard amongst reputabe communities
+    no_moves = 0
+    if depth == 0: #base case
+        return 1
+
     moves = legal_moves(board)
-    pass
+
+    for move in moves:
+        board.make_move(*move)
+        board.turn = "Black" if board.turn == "White" else "White"
+        no_moves += perft(board, depth-1) #call until the base cas
+        board.turn = "Black" if board.turn == "White" else "White"
+        board.unmake_move()
+    return no_moves

@@ -1,14 +1,12 @@
 from board import Board
-from move_generation import legal_moves
+from move_generation import legal_moves,perft
 import os
 #coordinates 0,0 is the top left which is the black rook in the starting position
 
 def main():
     board = Board()
-    print(board)
-    print(board.evaluation_points())
-    board.grid[0][0] = 0
-    print(board)
-    print(board.evaluation_points())
+    for i in range(1,6):
+        print(perft(board,depth=i))
+
 if __name__ == "__main__":
     main()
