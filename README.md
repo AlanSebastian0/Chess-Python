@@ -24,3 +24,4 @@ A chess engine written in Python.
 - `board.py` — represents the chess board and pieces
 - `move_generation.py` — generates legal piece movements
 - `main.py` — program entry point
+- `search.py` - The chess engine
