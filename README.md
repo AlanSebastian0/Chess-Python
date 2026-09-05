@@ -13,9 +13,9 @@ A chess engine written in Python.
 - Move generation
 - Enpassant logic
 - Castling logic
+- Perft logic
 
 ## In Progress
-- Performance checking (no. legal_moves upto a certain depth from starting position)
 - Stalemate detection
 - Checkmate detection
 

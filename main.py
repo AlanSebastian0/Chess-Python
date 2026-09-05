@@ -5,7 +5,7 @@ import os
 
 def main():
     board = Board()
-    for i in range(1,6):
+    for i in range(1,4):
         print(perft(board,depth=i))
 
 if __name__ == "__main__":

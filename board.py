@@ -134,6 +134,9 @@ class Board:
 
     def is_check(self) -> bool:
         # Get king square for current turn
+        distance = tuple(x-y for x,y in zip(self.white_king_location, self.black_king_location))
+        if abs(distance[0]) <= 1 and abs(distance[1]) <= 1:
+            return True #checks if the kings are 'touching' each other
         king_square = self.white_king_location if self.turn == "White" else self.black_king_location
         k_row, k_col = king_square
         # First 4 offsets are straight (Rooks), last 4 are diagonal (Bishops)
@@ -158,6 +161,7 @@ class Board:
 
                 curr_row += d_row #empty square keeping on applying the offsets
                 curr_col += d_col
+        #Knight offsets
         for d_row, d_col in knight_moves:
             curr_row = k_row + d_row
             curr_col = k_col + d_col
@@ -174,6 +178,7 @@ class Board:
                 piece = self.get_piece((curr_row, curr_col))
                 if abs(piece) == 1 and not self.is_own_piece(piece):
                     return True
+
         return False  #return false when a check was not detected
 
     def unmake_move(self): #undoes the last made move using history stack
